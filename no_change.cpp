@@ -16,7 +16,7 @@ bool can_pay(int value, int coin, int can_use) {
 	return true;
 
     // pay the rest with other coins
-    int max_use = min(value/coin_value, can_use) ;
+    int max_use = min(value/coin_value, can_use);
     for ( ; max_use > 0; max_use--) {
 	if (can_pay(value - max_use * coin_value, coin + 1, max_use))
 	    return true;
@@ -25,12 +25,12 @@ bool can_pay(int value, int coin, int can_use) {
     return false;
 }
 
-int main () {
+int main() {
     int cases;
     int value, coin_types;
 
     cin >> cases;
-    for( ; cases > 0; cases--) {
+    for ( ; cases > 0; cases--) {
 	cin >> value >> coin_types;
 	
 	for ( ; coin_types > 0; coin_types--) {
@@ -39,11 +39,13 @@ int main () {
 	    coins.push_back(tmp);
 	}
 
-	if(can_pay(value, 0, 100000))
+	if (can_pay(value, 0, 100000))
 	    cout << "YES" << endl;
 	else
 	    cout << "NO" << endl;
 	cout << endl;
 	
     }
+    
+    return 0;
 }
