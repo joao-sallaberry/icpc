@@ -42,14 +42,14 @@ void get_sentences(int offset, string output) {
     if (offset == m_sentence.size()) {
 	//cout << output << endl;
 	return;
-    }	
+    }
 
     for (char c = 'A'; c <= 'Z'; c++) {
 	if (m_sentence.compare(offset, morse[c].size(), morse[c]) == 0)
 	    get_sentences(offset + morse[c].size(), output + c);
     }
-}
 
+}
 
 int main() {
     int cases;
@@ -60,7 +60,7 @@ int main() {
     cin >> cases;
     for ( ; cases > 0; cases--) {
 	cin >> m_sentence >> words;
-	
+
 	for ( ; words > 0; words--) {
 	    string tmp;
 	    cin >> tmp;
@@ -70,7 +70,7 @@ int main() {
 	cout << m_sentence << endl;
 
 	get_sentences(0, "");
-	
+
     }
 
     return 0;
