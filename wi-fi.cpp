@@ -1,9 +1,12 @@
 #include <iostream>
 #include <algorithm>
+#include <cstdio>
+
 using namespace std;
 
+#define PREC             10
 #define MAX_HOUSES   100000
-#define MAX_NUMBERS 1000000
+#define MAX_NUMBERS 1000000*PREC
 
 int aps, houses;
 int house_numbers[MAX_HOUSES];
@@ -32,12 +35,20 @@ int main() {
   int cases;
 
   cin >> cases;
+  cout.precision(2);
   while (cases--) {
     cin >> aps >> houses;
-    for (int i = 0; i < houses; i++)
+    for (int i = 0; i < houses; i++) {
       cin >> house_numbers[i];
+      house_numbers[i] *= PREC;
+    }
     sort (house_numbers, house_numbers + houses);
-    //TODO if more aps than houses
+
+    if (aps >= houses) {
+      cout << "0.0" << endl;
+      continue;
+    }
+
     int min = 0;
     int max = MAX_NUMBERS;
     int mean;
@@ -49,7 +60,7 @@ int main() {
       check_with_distance(mean) ? max = mean : min = mean;
     }
 
-    cout << max << endl;
+    printf ("%.1f\n", max/(float)PREC);
 
   }
 
