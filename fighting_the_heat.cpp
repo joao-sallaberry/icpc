@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
-#include <cstring>
 #include <string>
-#include <utility> 
+#include <utility>
+#include <cstdio>
 
 using namespace std;
 
@@ -27,18 +27,50 @@ char table[MAX_DIM][MAX_DIM];
 vector<line> lines;
 
 
+vector<int> KMP(string S, string K) {
+  vector<int> T(K.size() + 1, -1);
+  vector<int> matches;
+  
+  if (K.size() == 0) {
+    matches.push_back(0);
+    return matches;
+  }
+  for (int i = 1; i <= K.size(); i++) {
+    int pos = T[i - 1];
+    while (pos != -1 && K[pos] != K[i - 1])
+      pos = T[pos];
+    T[i] = pos + 1;
+  }
+  
+  int sp = 0;
+  int kp = 0;
+  while (sp < S.size()) {
+    while (kp != -1 && (kp == K.size() || K[kp] != S[sp]))
+      kp = T[kp];
+    kp++;
+    sp++;
+    if(kp == K.size())
+      matches.push_back(sp - K.size());
+  }
+  
+  return matches;
+}
+
+
 int main() {
   int r, c, k; // n=r(ows), m=c(olumns)
   
   while (1) {
-    cin >> r >> c >> k;
-    
+    scanf("%d %d", &r, &c);
+    scanf("%d", &k);
+
     if (!r)
       break;
     
     for (int i = 0; i < k; i++) {
       string word;
       cin >> word;
+      //scanf("%s", word);
       words.push_back(word);
       word = string (word.rbegin(), word.rend());
       words.push_back(word);
@@ -46,12 +78,10 @@ int main() {
 
     // table
     for (int i = 0; i < r; i++) {
-      string s;
-      cin >> s;
       for (int j = 0; j < c; j++) {
-	//l.append(s.at(j), i, j);
-	//lines.push_back(s);
-	table[i][j] = s.at(j);
+	char c;
+	scanf(" %c", &c);
+	table[i][j] = c;
       }
     }
 
@@ -99,20 +129,13 @@ int main() {
       lines.push_back(l);
     }
 
-    // search lines
+    // search
     for (auto l : lines)
       for (auto w : words) {
-	size_t pos = 0;
-	while (1) {
-	  pos = l.str.find(w, pos);
-	  if (pos == string::npos)
-	    break;
-	  for (int j = 0; j < w.length(); j++) {
-	    table[get<0>(l.pos[pos+j])] [get<1>(l.pos[pos+j])] = 0;
-	  }
-	  if (pos < l.str.length()-1) pos++;
-	  else break;
-	}
+	vector<int> founds = KMP(l.str, w);
+	for (auto f : founds)
+	  for (int j = 0; j < w.length(); j++)
+	    table[get<0>(l.pos[f+j])] [get<1>(l.pos[f+j])] = 0;
       }
     
     //for (auto a : lines)
@@ -122,8 +145,8 @@ int main() {
     for (int i = 0; i < r; i++)
       for (int j = 0; j < c; j++)
 	if (table[i][j])
-	  cout << table[i][j];
-    cout << endl;
+	  printf("%c", table[i][j]);
+    printf("\n");
     
     r = 0;
   }
