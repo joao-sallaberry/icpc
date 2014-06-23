@@ -11,6 +11,8 @@ vector<string> words;
 bool table[40][40];
 string rows[MAX_DIM];
 string columns[MAX_DIM];
+string diags[MAX_DIM];
+
 
 int main() {
   int r, c, k; // n=r(ows), m=c(olumns)
@@ -32,13 +34,30 @@ int main() {
     //memset(columns, 0, sizeof columns);
     memset(table, false, sizeof table);
 
+    // rows
     for (int i = 0; i < r; i++)
       cin >> rows[i];
 
+    // columns
     for (int i = 0; i < c; i++)
       for (int j = 0; j < r; j++) {
 	columns[i].append(string(1, rows[j].at(i)));
       }
+
+    // diags
+    for (int i = 0; i < r; i++)
+      for (int x = i, y = 0; x < r && y < c; x++, y++) {
+	diags[i].append(string(1, rows[x].at(y)));
+      }
+    for (int i = 1; i < c; i++)
+      for (int x = 0, y = i; x < r && y < c; x++, y++) {
+	diags[r+i-1].append(string(1, rows[x].at(y)));
+      }
+      
+    
+
+    //for (int i = 0; i < r+c-1; i++)
+    //cout << diags[i] << endl;
 
     //cout << columns[5] << endl;
 
